@@ -1,0 +1,61 @@
+/*
+================================================================================================
+	
+	Requête de performance des backups
+
+	----------		-------		---------------------------------------------------------------------
+	Paramètres		Type		Description
+	----------		-------		---------------------------------------------------------------------
+	@NbJourHisto	int			Le nombre de jours d'historique requis
+
+	----------		-------		---------------------------------------------------------------------
+	Variables		Type		Description
+	----------		-------		---------------------------------------------------------------------
+	@DateHisto		datetime	Date calculée du premier backup, soit la date d'aujourd'hui (GETDATE) moins le
+								nombre de jours d'historique (@NbJourHisto)
+								
+================================================================================================
+*/
+DECLARE @NbJourHisto	int
+DECLARE @DateHisto		datetime
+
+-- Paramètre: Nb de jour d'historique requis
+SET @NbJourHisto=180
+
+-- Calcule la date du premier backup (aujourd'hui - @NbJourHisto)
+SET @DateHisto=FLOOR(CAST(DATEADD(dd,-1*@NbJourHisto,GETDATE()) as FLOAT ))
+
+-- Affiche la date de début d'historique
+SELECT @DateHisto as Historique_Depuis_Le
+
+-----------------------------------------
+-- Requête d'historique des backups
+SELECT	
+		[server_name]
+		,[machine_name]
+		,[database_name]
+		,DATEDIFF(ss,[backup_start_date],[backup_finish_date])/3600 AS Heures
+		,(DATEDIFF(ss,[backup_start_date],[backup_finish_date]) % 3600)/60 AS Minutes			
+		,DATEDIFF(ss,[backup_start_date],[backup_finish_date]) % 60 AS Secondes
+		,[backup_start_date]
+		,[backup_finish_date]
+		,[type]
+		,[recovery_model]
+		,[sort_order]
+		,[code_page]
+		,[compatibility_level]
+		,[database_version]	
+		,CASE 
+			WHEN [backup_start_date]<[backup_finish_date] 
+				THEN cast(([backup_size]/DATEDIFF(ss,[backup_start_date],[backup_finish_date]))/1024/1024 as INT)
+			ELSE 0
+		END as TauxTransfertMBPS
+		,[backup_size]/1024/1024 as TailleMB
+		,CAST([backup_size]/1024/1024/1024 AS INT ) as TailleGB
+		,[name]
+		,[description]
+		,[user_name]	
+FROM	[msdb].[dbo].[backupset]
+WHERE	[backup_start_date]>@DateHisto and [database_name] =@@databasename
+ORDER BY  [backup_start_date] desc --Heures DESC, Minutes DESC, Secondes DESC
+-----------------------------------------
