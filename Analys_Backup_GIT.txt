@@ -13,7 +13,10 @@
 	----------		-------		---------------------------------------------------------------------
 	@DateHisto		datetime	Date calculée du premier backup, soit la date d'aujourd'hui (GETDATE) moins le
 								nombre de jours d'historique (@NbJourHisto)
-								
+	----------		-------		---------------------------------------------------------------------
+	Develope By             datetime        Description
+	----------		-------		---------------------------------------------------------------------
+	Juan C. Higuerey	06/16/2015      Version initialle
 ================================================================================================
 */
 DECLARE @NbJourHisto	int
@@ -56,6 +59,6 @@ SELECT
 		,[description]
 		,[user_name]	
 FROM	[msdb].[dbo].[backupset]
-WHERE	[backup_start_date]>@DateHisto and [database_name] =@@databasename
+WHERE	[backup_start_date]>@DateHisto and [database_name] =@@databasenam >> nob de la banque de donees
 ORDER BY  [backup_start_date] desc --Heures DESC, Minutes DESC, Secondes DESC
 -----------------------------------------
