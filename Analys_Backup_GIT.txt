@@ -59,6 +59,6 @@ SELECT
 		,[description]
 		,[user_name]	
 FROM	[msdb].[dbo].[backupset]
-WHERE	[backup_start_date]>@DateHisto and [database_name] =@@databasenam >> nob de la banque de donees
+WHERE	[backup_start_date]>@DateHisto and [database_name] =@@databasenam >> nom de la banque de donees
 ORDER BY  [backup_start_date] desc --Heures DESC, Minutes DESC, Secondes DESC
 -----------------------------------------
