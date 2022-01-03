@@ -1,5 +1,5 @@
 - 👋 Hi, I’m @JuanCHiD
-- 👀 I’m interested in Data Bases Administration
+- 👀 I’m interested in Databases Administration SQL Server/ORACLE/DB2
 - 🌱 I’m currently learning Azure for SQL Server databases 
 - 💞️ I’m looking to collaborate on SQL Server administration scripts
 - 📫 How to reach me on email: jhigyerey@gmail.com
